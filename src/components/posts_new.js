@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 
+import { createPost } from '../actions/index';
+
 class PostsNew extends Component {
   render() {
     const { fields: { title, categories, content }, handleSubmit } = this.props;
@@ -8,7 +10,7 @@ class PostsNew extends Component {
     //{...title} is a shorthand that descronstructs the object title so all the properties are available to the input. It is the same as doing onChange={title.onChange}, ... but with all the properties
 
     return(
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(this.props.createPost)}>
         <h3>Create a new post</h3>
         <div className="form-group">
           <label>Title</label>
@@ -31,7 +33,12 @@ class PostsNew extends Component {
   }
 }
 
+//connect: 1st argument is mapStateToProps, 2nd argument is mapDispatchToProps
+//reduxForm: 1st argument is form config, 2nd is mapStateToProps, 3rd is mapDispatchToProps
+
 export default reduxForm({
   form: 'PostNewForm',
   fields: ['title', 'categories', 'content']
-})(PostsNew);
+}, null, { createPost })(PostsNew);
+
+// { createPost is the shorthand that I have not used in the bloglist smart component but I explained it there. It is a shorthand to not use mapDispatchToProps }
