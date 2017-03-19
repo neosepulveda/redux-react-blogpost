@@ -15,6 +15,9 @@ class PostsNew extends Component {
         <div className="form-group">
           <label>Title</label>
           <input type="text" className="form-control" {...title} />
+          <div className="text-help">
+            {title.touched ? title.error : ''}
+          </div>
         </div>
 
         <div className="form-group">
@@ -33,12 +36,25 @@ class PostsNew extends Component {
   }
 }
 
+
+function validate(values) {
+  const errors = {};
+
+  if (!values.title) {
+    errors.title = "Enter a title";
+  }
+
+  return errors;
+}
+
+
 //connect: 1st argument is mapStateToProps, 2nd argument is mapDispatchToProps
 //reduxForm: 1st argument is form config, 2nd is mapStateToProps, 3rd is mapDispatchToProps
 
 export default reduxForm({
   form: 'PostNewForm',
-  fields: ['title', 'categories', 'content']
+  fields: ['title', 'categories', 'content'],
+  validate
 }, null, { createPost })(PostsNew);
 
 // { createPost is the shorthand that I have not used in the bloglist smart component but I explained it there. It is a shorthand to not use mapDispatchToProps }
