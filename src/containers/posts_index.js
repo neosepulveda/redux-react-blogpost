@@ -19,5 +19,9 @@ class PostsIndex extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ fetchPosts }, dispatch);
 }
+//We could not use the mapDispatchToProps method and directly do
+//export default connect(null, { fetchPosts: fetchPosts })(PostsIndex)
+//which a short hand of the mapDispatchToProps boilerplate
+//Also because { fetchPosts: fetchPosts }, the key and the method have the same name we could do { fetchPosts } ES6 fancy sintax
 
 export default connect(null, mapDispatchToProps) (PostsIndex);
