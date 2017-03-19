@@ -23,11 +23,17 @@ class PostsNew extends Component {
         <div className="form-group">
           <label>Categories</label>
           <input type="text" className="form-control" {...categories} />
+          <div className="text-help">
+            {categories.touched ? categories.error : ''}
+          </div>
         </div>
 
         <div className="form-group">
           <label>Content</label>
           <textarea className="form-control" {...content} />
+          <div className="text-help">
+            {content.touched ? content.error : ''}
+          </div>
         </div>
 
         <button type="submit" className="btn btn-primary">Submit</button>
@@ -41,7 +47,13 @@ function validate(values) {
   const errors = {};
 
   if (!values.title) {
-    errors.title = "Enter a title";
+    errors.title = "Title cannot be empty";
+  }
+  if (!values.categories) {
+    errors.categories = "Categories cannot be empty";
+  }
+  if (!values.content) {
+    errors.content = "Content cannot be empty";
   }
 
   return errors;
