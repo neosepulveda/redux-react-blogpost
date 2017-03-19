@@ -1,17 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Link } from 'react-router';
 
 import { createPost } from '../actions/index';
 
 class PostsNew extends Component {
+  //Try to avoid working with contextTypes. It should be only used when working with react-router
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
+  onSubmit(props) {
+    this.props.createPost(props)
+      .then(() => {
+        //blog post has been created, navigate the user to the index
+        //we navigate by calling this.context.router.push with
+        //the new path to navigate to.
+        this.context.router.push('/');
+      });
+  }
+
   render() {
     const { fields: { title, categories, content }, handleSubmit } = this.props;
     //ES6 fancy syntax equivalent to const handleSubmit = this.props.handleSubmit
     //{...title} is a shorthand that descronstructs the object title so all the properties are available to the input. It is the same as doing onChange={title.onChange}, ... but with all the properties
 
     return(
-      <form onSubmit={handleSubmit(this.props.createPost)}>
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <h3>Create a new post</h3>
         <div className={`form-group ${title.touched && title.invalid ? 'has-danger' : ''}`}>
           <label>Title</label>
