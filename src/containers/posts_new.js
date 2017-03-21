@@ -36,41 +36,30 @@ class PostsNew extends Component {
       });
   }
 
-  validInputForm(attribute) {
-    return `${attribute.touched && attribute.invalid ? 'has-danger' : ''}`;
+  renderField(fieldConfig, field) {
+    const fieldHelper = this.props.fields[field];
+
+    return (
+      <div key={fieldHelper.name} className={`form-group ${fieldHelper.touched && fieldHelper.invalid ? 'has-danger' : ''}`}>
+        <label>{fieldConfig.label}</label>
+        <fieldConfig.type type="text" className="form-control" {...fieldHelper} />
+        <div className="text-help">
+          {fieldHelper.touched ? fieldHelper.error : ''}
+        </div>
+      </div>
+    );
   }
 
   render() {
-    const { fields: { title, categories, content }, handleSubmit } = this.props;
+    const { handleSubmit } = this.props;
     //ES6 fancy syntax equivalent to const handleSubmit = this.props.handleSubmit
     //{...title} is a shorthand that descronstructs the object title so all the properties are available to the input. It is the same as doing onChange={title.onChange}, ... but with all the properties
 
     return(
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <h3>Create a new post</h3>
-        <div className={`form-group ${this.validInputForm(title)}`}>
-          <label>Title</label>
-          <input type="text" className="form-control" {...title} />
-          <div className="text-help">
-            {title.touched ? title.error : ''}
-          </div>
-        </div>
 
-        <div className={`form-group ${this.validInputForm(categories)}`}>
-          <label>Categories</label>
-          <input type="text" className="form-control" {...categories} />
-          <div className="text-help">
-            {categories.touched ? categories.error : ''}
-          </div>
-        </div>
-
-        <div className={`form-group ${this.validInputForm(content)}`}>
-          <label>Content</label>
-          <textarea className="form-control" {...content} />
-          <div className="text-help">
-            {content.touched ? content.error : ''}
-          </div>
-        </div>
+        {_.map(FIELDS, this.renderField.bind(this))}
 
         <button type="submit" className="btn btn-primary">Submit</button>
         <Link to="/" className="btn btn-danger">
