@@ -1,8 +1,24 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Link } from 'react-router';
 
 import { createPost } from '../actions/index';
+
+const FIELDS = {
+  title: {
+    type: "input",
+    label: "Title for post"
+  },
+  categories: {
+    type: "input",
+    label: "Enter some categories for this post"
+  },
+  content: {
+    type: "textarea",
+    label: "Enter some content for this post"
+  }
+};
 
 class PostsNew extends Component {
   //Try to avoid working with contextTypes. It should be only used when working with react-router
@@ -69,15 +85,11 @@ class PostsNew extends Component {
 function validate(values) {
   const errors = {};
 
-  if (!values.title) {
-    errors.title = "Title cannot be empty";
-  }
-  if (!values.categories) {
-    errors.categories = "Categories cannot be empty";
-  }
-  if (!values.content) {
-    errors.content = "Content cannot be empty";
-  }
+  _.each(FIELDS, (type, field) => {
+    if (!values[field]) {
+      errors[field] = `Enter a ${field}`;
+    }
+  });
 
   return errors;
 }
@@ -88,7 +100,7 @@ function validate(values) {
 
 export default reduxForm({
   form: 'PostNewForm',
-  fields: ['title', 'categories', 'content'],
+  fields: _.keys(FIELDS),
   validate
 }, null, { createPost })(PostsNew);
 
